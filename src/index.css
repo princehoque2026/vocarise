@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  @apply bg-white text-black font-sans antialiased;
+}
+
+.card {
+  @apply bg-white border border-gray-200 rounded-2xl shadow-sm transition-all duration-300 hover:shadow-md;
+}
+
+.btn-primary {
+  @apply bg-black text-white px-6 py-2 rounded-full font-medium transition-transform active:scale-95 hover:bg-gray-800;
+}
+
+.btn-outline {
+  @apply border border-black text-black px-6 py-2 rounded-full font-medium transition-transform active:scale-95 hover:bg-gray-50;
+}
+
+.badge-b2 {
+  @apply bg-blue-600 text-white px-2 py-0.5 rounded-md text-xs font-bold;
+}
+
+.badge-c1 {
+  @apply bg-purple-600 text-white px-2 py-0.5 rounded-md text-xs font-bold;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
