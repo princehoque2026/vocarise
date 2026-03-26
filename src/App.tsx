@@ -17,7 +17,8 @@ import {
   CheckCircle2,
   XCircle,
   Filter,
-  RefreshCw
+  RefreshCw,
+  Volume2
 } from 'lucide-react';
 import { Word, UserStats } from './types';
 import { getStats, getDailyWords, saveDailyWords, updateStreak, markWordLearned, markWordWeak } from './lib/storage';
@@ -484,6 +485,13 @@ function LearningScreen({ words, filter, setFilter, onComplete }: { words: Word[
     return `Word ${currentIndex + 1} of ${words.length}. Keep going, you're building a strong vocabulary! 🐾`;
   };
 
+  const speak = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
+  };
+
   const next = () => {
     if (currentIndex < words.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -544,7 +552,16 @@ function LearningScreen({ words, filter, setFilter, onComplete }: { words: Word[
           {/* Front */}
           <div className="absolute inset-0 backface-hidden card flex flex-col items-center justify-center p-8 text-center gap-4">
             <LevelBadge level={word.level} />
-            <h3 className="text-4xl font-black tracking-tight">{word.word}</h3>
+            <div className="flex items-center gap-3">
+              <h3 className="text-4xl font-black tracking-tight">{word.word}</h3>
+              <button 
+                onClick={(e) => { e.stopPropagation(); speak(word.word); }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                title="Listen"
+              >
+                <Volume2 size={24} />
+              </button>
+            </div>
             <p className="text-gray-400 text-sm italic">Tap to flip</p>
           </div>
 
@@ -621,6 +638,13 @@ function QuizScreen({ words, filter, setFilter, isLevelMode, onComplete }: { wor
     if (selectedOption === null) return 'thinking';
     if (isCorrect) return 'excited';
     return 'sad';
+  };
+
+  const speak = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
   };
 
   const handleMcqSubmit = (option: string) => {
@@ -743,7 +767,15 @@ function QuizScreen({ words, filter, setFilter, isLevelMode, onComplete }: { wor
 
         {quizType === 'mcq' ? (
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-center">What is the meaning of "<span className="underline decoration-2 underline-offset-4">{word.word}</span>"?</h3>
+            <div className="flex flex-col items-center gap-4">
+              <h3 className="text-2xl font-bold text-center">What is the meaning of "<span className="underline decoration-2 underline-offset-4">{word.word}</span>"?</h3>
+              <button 
+                onClick={() => speak(word.word)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-bold"
+              >
+                <Volume2 size={18} /> Listen
+              </button>
+            </div>
             <div className="grid grid-cols-1 gap-3">
               {options.map((opt, i) => (
                 <button 
@@ -766,10 +798,18 @@ function QuizScreen({ words, filter, setFilter, isLevelMode, onComplete }: { wor
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="space-y-2 text-center">
-              <p className="text-gray-500 italic">"{word.sentence.replace(new RegExp(word.word, 'gi'), '_______')}"</p>
-              <h3 className="text-xl font-bold">Fill in the blank:</h3>
-              <p className="text-sm text-gray-400">Meaning: {word.meaning_bn}</p>
+            <div className="flex flex-col items-center gap-4">
+              <div className="space-y-2 text-center">
+                <p className="text-gray-500 italic">"{word.sentence.replace(new RegExp(word.word, 'gi'), '_______')}"</p>
+                <h3 className="text-xl font-bold">Fill in the blank:</h3>
+                <p className="text-sm text-gray-400">Meaning: {word.meaning_bn}</p>
+              </div>
+              <button 
+                onClick={() => speak(word.word)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-bold"
+              >
+                <Volume2 size={18} /> Listen
+              </button>
             </div>
             <div className="space-y-4">
               <input 
