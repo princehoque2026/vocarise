@@ -74,3 +74,22 @@ export const markWordWeak = (word: string) => {
     saveStats(stats);
   }
 };
+
+export const removeFromWeakWords = (word: string) => {
+  const stats = getStats();
+  stats.weakWords = stats.weakWords.filter(w => w !== word);
+  saveStats(stats);
+};
+
+export const getWeakWordsData = (): Word[] => {
+  const stats = getStats();
+  const saved = localStorage.getItem(STORAGE_KEYS.WORDS_BY_DATE);
+  if (!saved) return [];
+  
+  const allDailyWords: DailyWords[] = JSON.parse(saved);
+  const allWords: Word[] = allDailyWords.flatMap(d => d.words);
+  
+  return stats.weakWords.map(wordStr => 
+    allWords.find(w => w.word === wordStr)
+  ).filter((w): w is Word => !!w);
+};
